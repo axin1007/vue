@@ -9,13 +9,11 @@
         2. 父组件 - 传值进去
      -->
      <MyProduct
-     v-for="(item,index) in list" 
+     v-for="item in list" 
      :key="item.id" 
      :title="item.proname"
      :price="item.proprice" 
      :info="item.info" 
-     :index ="index"
-     @del="delFn"
      ></MyProduct>
   </div>
 </template>
@@ -54,12 +52,6 @@ export default {
         },
       ],
     };
-  },
-  methods:{
-    delFn(val){
-      console.log("1111")
-      this.list[val].proprice--;
-    }
   },
   components: {
     MyProduct,
