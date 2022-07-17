@@ -24,6 +24,7 @@
           :key="index"
           :obj="item"
           @del="delFn"
+          @check="checkFn"
         >
         </List>
       </thead>
@@ -85,18 +86,10 @@ export default {
       }  , 0)  
     },
     allCheck:{
-      // set类似于监听事件，只要input框值发生变化了就会触发
-      // val参数相当于input的 checked属性值 ，可以使用set(val)方法用来控制 其它的复选框 与之同步
-      // set(val){  console.log(val)  },
-
-      // get()方法里面返回的是复选框的选中状态，其它的复选框可以在这里面对其控制是否选中状态
-      // get(){ return true}
-
       set(val){
         this.goodList.forEach(item => item.checked = val)
       },
       get(){
-        if(this.goodList.length == 0) return false
         return this.goodList.every(item => item.checked)
       }
     }
@@ -110,10 +103,10 @@ export default {
     //     this.goodList.forEach((item) => item.checked = false)
     //   }
     // },
-    
-    // 删除单个
     delFn(name){
-      this.goodList = this.goodList.filter(item => item.name != name )
+      this.goodList = this.goodList.filter((item) => {
+        return item.name != name
+      })
     },
     // 单选
    /* 
