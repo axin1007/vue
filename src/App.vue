@@ -80,7 +80,9 @@ export default {
   computed:{
     getAllSum(){
       return this.goodList.reduce((reValue,item) => {
-        reValue = reValue + item.price * item.num 
+        if(item.checked){
+          reValue = reValue + item.price * item.num 
+        } 
         return reValue
       }  , 0)  
     },
