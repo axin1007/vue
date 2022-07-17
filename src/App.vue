@@ -1,68 +1,127 @@
 <template>
-  <div>
-    <!-- 当成普通标签来使用 -->
-    <!-- 
-      目标: 父(App.vue) -> 子(MyProduct.vue) 分别传值进入
-      需求: 每次组件显示不同的数据信息
-      步骤(口诀):
-        1. 子组件 - props - 变量 (准备接收)
-        2. 父组件 - 传值进去
-     -->
-     <MyProduct
-     v-for="(item,index) in list" 
-     :key="item.id" 
-     :title="item.proname"
-     :price="item.proprice" 
-     :info="item.info" 
-     :index ="index"
-     @del="delFn"
-     ></MyProduct>
+  <div id="app">
+    <div>
+      <span>姓名:</span>
+      <input type="text" v-model="name"/>
+    </div>
+    <div>
+      <span>年龄:</span>
+      <input type="number" v-model="age"/>
+    </div>
+    <div>
+      <span>性别:</span>
+      <select v-model="sex">
+        <option value="男">男</option>
+        <option value="女">女</option>
+      </select> <br>
+      <p v-show="!two">正在编辑的数据id为{{target + 1}}</p>
+      <p v-show="!two">点击完成编辑，进入倒计时{{n}}s</p>
+    </div>
+    <div>
+      <button @click="add(target)" >{{two ? "添加" : "点击完成修改"}}</button>
+    </div>
+    <div>
+      <table
+        border="1"
+        cellpadding="10"
+        cellspacing="0"
+      >
+        <tr>
+          <th>序号</th>
+          <th>姓名</th>
+          <th>年龄</th>
+          <th>性别</th>
+          <th>操作</th>
+        </tr>
+        <tr v-for="(item, index) in arr" :key="item.id">
+          <td>{{index + 1}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.age}}</td>
+          <td>{{item.sex}}</td>
+          <td>
+            <button @click="del(index)">删除</button>
+            <button @click="edit(index)">编辑</button>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
-
 <script>
-// 引入
-import MyProduct from './components/MyProduct.vue'
 export default {
   data() {
     return {
-      msg: "超级好吃的口水鸡",
-      list: [
-        {
-          id: 1,
-          proname: "超级好吃的棒棒糖",
-          proprice: 18.8,
-          info: "开业大酬宾, 全场8折",
-        },
-        {
-          id: 2,
-          proname: "超级好吃的大鸡腿",
-          proprice: 34.2,
-          info: "好吃不腻, 快来买啊",
-        },
-        {
-          id: 3,
-          proname: "超级无敌的冰激凌",
-          proprice: 14.2,
-          info: "炎热的夏天, 来个冰激凌了",
-        },
-        {
-          id: 4,
-          proname: "超级无敌的冰激凌",
-          proprice: 13.2,
-          info: "炎热的夏天, 来个冰激凌了",
-        },
-      ],
-    };
-  },
+      arr: JSON.parse(localStorage.getItem('arr1')) ,
+      name:" ",
+      age:0,
+      sex:"男",
+      two:true,
+      target: "",
+      n: "",
+    }
+  },  
   methods:{
-    delFn(val){
-      console.log("1111")
-      this.list[val].proprice--;
+    add(index){
+      if(!this.name.trim()) {
+        this.name ='';
+        return alert("Please enter a name");
+      } 
+      if (this.two) {
+         const obj = {name:this.name,  age:this.age, sex:this.sex }
+         this.arr.push(obj)
+         this.name = ""
+      }else{
+        this.arr[index].name = this.name
+        this.arr[index].age = this.age
+        this.arr[index].sex = this.sex
+        let timer = setInterval(() => {
+          this.n--
+        }, 1000);
+        setTimeout(() => {
+          clearInterval(timer);
+          this.two = true
+        }, 3000)
+        this.name = ""
+        this.age = 0
+      }
+     
+    },
+    del(index){
+      this.arr.splice(index,1)
+    },
+    edit(index){
+      this.two = false;
+      this.name = this.arr[index].name;
+      this.age = this.arr[index].age;
+      this.sex = this.arr[index].sex;
+      this.target = index
+      this.n = 3
     }
   },
-  components: {
-    MyProduct,
+  watch:{
+    arr:{
+      deep:true,
+      handler(val){
+        localStorage.setItem("arr1",JSON.stringify(val || []) )
+      }
+    }
   }
-};
+  
+}
 </script>
+
+<style scoped>
+#app{
+  margin-left: 20px;
+}
+ table,
+        td,
+        th {
+            border: 1px solid skyblue;
+
+            /* 合并相邻的边框 */
+            /* border-collapse: collapse; */
+            /* font-size: 14px; */
+            text-align: center;
+        }
+</style>
