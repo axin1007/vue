@@ -90,6 +90,7 @@ export default {
         this.goodList.forEach(item => item.checked = val)
       },
       get(){
+        if(this.goodList.length == 0) return false
         return this.goodList.every(item => item.checked)
       }
     }
