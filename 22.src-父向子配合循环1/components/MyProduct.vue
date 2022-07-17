@@ -13,8 +13,8 @@ export default {
   //  proname: "超级好吃的棒棒糖",
   //  proprice: 18.8,
   //  info: "开业大酬宾, 全场8折",
-  props: {
-    obj: {
+  props:{
+    obj:{
       type: Object,
       required: true,  // 强制校验必填
       default: () => ({}), // {} 还是返回空对象
