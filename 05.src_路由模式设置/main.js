@@ -4,33 +4,37 @@ Vue.config.productionTip = false
 import Find from "./views/Find.vue"
 import My from "./views/My.vue"
 import Part from "./views/Part.vue"
+import NotFound from "./views/NotFound.vue"
 
 // 1.下载，引入 vue-router
 import VueRouter from 'vue-router'
 // 2.全局注册
 Vue.use(VueRouter)
-// 修正重复点击报错
-const VueRouterPush = VueRouter.prototype.push;
-VueRouter.prototype.push = function push(to) {
-  return VueRouterPush.call(this, to).catch((err) => err);
-};
 // 3.配置路由规则
 // 确认要展示的页面
 const routes = [
   {
+    path: "/", // 默认hash值路径
+    redirect: "/find", // 重定向到/find
+    // 浏览器url中#后的路径被改变成/find-重新匹配数组规则
+  },
+  {
     path: "/find",
-    name: "Find",
     component: Find
   },
   {
     path: "/my",
-    name: "My",
     component: My
   },
   {
+    // 有:的路径代表要接收具体的值
     path: "/part",
-    name: "Part",
     component: Part
+  },
+  {
+    // 404在最后(规则是从前往后逐个比较path)
+    path: "*",
+    component: NotFound
   },
 ]
 
