@@ -11,7 +11,7 @@
 <script>
 import Movie from "./views/Find.vue";
 import Home from "./views/My.vue";
-import About from "./views/Part";
+import About from "./views/Part.vue";
 export default {
   name: "DemoApp",
   data() {
