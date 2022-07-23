@@ -1,7 +1,7 @@
 // 导入Vue
 import Vue from "vue"
 // 导入总组件App
-import App from "./App.vue" 
+import App from "./App.vue"
 // 导入 vue 路由
 import VueRouter from "vue-router"
 
@@ -14,10 +14,10 @@ Vue.config.productionTip = false
 Vue.use(VueRouter)
 
 // 配置路由规则，确定要显示的页面
-import routes from "./router/index"
+import routes from "./routes/index"
 
 // 创建 Vue路由实例对象
-const router = new VueRouter({ 
+const router = new VueRouter({
   // 传入规则
   // routes: routes,
   routes,
