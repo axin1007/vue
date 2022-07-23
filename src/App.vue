@@ -1,53 +1,84 @@
 <template>
   <div>
-    <h1>App组件</h1>
-    <a href="#/home">首页</a>&nbsp;
-    <a href="#/movie">电影</a>&nbsp;
-    <a href="#/about">关于</a>&nbsp;
-    <component :is="comName"></component>
+    <MyHeader
+      :background="'blue'"
+      :color="'white'"
+      title="TabBar案例"
+    ></MyHeader>
+    <div class="main">
+      <component :is="comName"></component>
+    </div>
+    <MyTabBar :list="list"
+    @change="changeFn"
+    ></MyTabBar>
   </div>
 </template>
 
 <script>
-import Movie from "./views/Find.vue";
-import Home from "./views/My.vue";
-import About from "./views/Part";
+import MyHeader from "./components/MyHeader.vue";
+// 目标: 完成底部封装
+// 1. MyTabBar.vue 组件标签+样式 准备
+// 2. 字体图标引入
+// 3. 准备底部数据
+// 4. 使用MyTabBar组件, 传入数据(父->子), 循环产生底部导航
+// 5. 子组件内props自定义检验规则(2-5项)
+// 6. 子组件内循环产生底部导航
+import MyTabBar from './components/MyTabBar.vue'
+
+// 目标: 切换组件显示
+// 1. 创建组件 - 编写内容
+// 2. 引入App.vue注册
+// 3. 挂载点设置is
+// 4. 切换comName的值(重要)
+// 5. 底部导航点击- MyTabBar.vue里
+// 子 -> 父技术 (传要切换的组件名出来)
+
+import MyGoodsList from './views/MyGoodList.vue'
+import MyGoodsSearch from './views/MySearch.vue'
+import MyUserInfo from './views/MyInfo.vue'
 export default {
-  name: "DemoApp",
   data() {
     return {
-      comName: "",
+      comName: "MyGoodsList", // 默认显示的组件
+      list: [ // 底部导航的数据
+        {
+          iconText: "icon-shangpinliebiao",
+          text: "商品列表",
+          componentName: "MyGoodsList",
+        },
+        {
+          iconText: "icon-sousuo",
+          text: "商品搜索",
+          componentName: "MyGoodsSearch",
+        },
+        {
+          iconText: "icon-user",
+          text: "我的信息",
+          componentName: "MyUserInfo",
+        },
+      ],
     };
   },
   components: {
-    Movie,
-    Home,
-    About,
+    MyHeader,
+    MyTabBar,
+    MyGoodsList,
+    MyGoodsSearch,
+    MyUserInfo
   },
-  mounted() {
-    const that = this;
-    window.onhashchange = function () {
-      console.log("===", location.hash);
-      // 有路径 找组件
-      // #/movie
-      // #/home
-      // #/about
-      switch (location.hash) {
-        case "#/movie":
-          that.comName = "Movie";
-          break;
-        case "#/home":
-          that.comName = "Home";
-          break;
-        case "#/about":
-          that.comName = "About";
-          break;
-      }
-    };
-  },
-
-  methods: {},
+  methods: {
+    changeFn(val){
+      
+      this.comName = val; // MyTabBar里选出来的组件名赋予给is属性的comName
+      // 导致组件的切换
+    }
+  }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.main{
+  padding-top: 45px;
+  padding-bottom: 51px;
+}
+</style>
